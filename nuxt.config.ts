@@ -1,8 +1,12 @@
 export default defineNuxtConfig({
   compatibilityDate: '2026-06-20',
+  devServer: {
+    port: 3301
+  },
   css: ['~/assets/css/main.css'],
   app: {
     head: {
+      title: 'DWN :: Reklamna Agencija',
       link: [
         { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
         { rel: 'icon', type: 'image/png', href: '/favicon.png' },

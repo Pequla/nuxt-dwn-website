@@ -9,7 +9,7 @@
         <a href="https://www.instagram.com/digital_with_neuro/" target="_blank" rel="noreferrer">Instagram</a>
         <a href="https://www.linkedin.com/company/digital-with-neuro" target="_blank" rel="noreferrer">LinkedIn</a>
       </div>
-      <p>© 2026 DWN Agency</p>
+      <p>© 2026 DWN Reklamna Agencija</p>
     </div>
   </footer>
 </template>
