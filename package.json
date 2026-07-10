@@ -1,0 +1,15 @@
+{
+  "name": "dwn-nuxt-app",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "seed:admin": "node scripts/create-admin.mjs"
+  },
+  "dependencies": {
+    "mysql2": "^3.11.5",
+    "nuxt": "^4.0.0"
+  }
+}
