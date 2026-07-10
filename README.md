@@ -12,7 +12,8 @@ Quick Nuxt 4 + MySQL website with:
 - full detail pages for blog posts and case studies
 - `Klijenti` category page for backlink/client articles
 - separate `Klijenti` admin tab for editing homepage client pills
-- embed HTML field for YouTube/iframe/Instagram/TikTok embeds
+- video/embed field for TikTok, Instagram, YouTube, Vimeo, direct video links or raw iframe/embed HTML
+- inline image insertion into blog and case study body text
 - favicon generated from the navbar logo
 - dynamic `/sitemap.xml`
 - MySQL queries through `mysql2`
@@ -109,7 +110,7 @@ pm2 start .output/server/index.mjs --name dwn-site
 
 ```text
 assets/css/main.css                  Global design system and responsive styles
-components/AppHeader.vue             Public navigation with cleaned logo
+components/AppHeader.vue             Public navigation, contact button and mobile hamburger menu
 components/AppFooter.vue             Footer
 components/BlogCard.vue              Blog preview card
 components/CaseCard.vue              Case study preview card
@@ -149,6 +150,17 @@ server/api/admin/sections*           Admin homepage CMS CRUD
 server/routes/sitemap.xml.get.ts     Dynamic sitemap
 scripts/create-admin.mjs             CLI admin user creator
 ```
+
+## Blog and case study media
+
+In `Admin → Blog` and `Admin → Case studije` you can:
+
+- upload a cover image through `Slika`
+- add images inside the text through `Dodaj sliku u tekst`
+- paste a TikTok, Instagram, YouTube, Vimeo or direct `.mp4/.webm/.ogg` link into `Video / Embed link ili HTML`
+- paste full iframe/embed HTML into the same field
+
+No new database migration is required for this version because the existing `body`, `image_media_id` and `embed_html` columns are reused.
 
 ## Editing clients
 

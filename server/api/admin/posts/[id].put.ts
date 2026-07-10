@@ -1,5 +1,6 @@
 import { requireAdmin } from '../../../utils/auth'
 import { slugify } from '../../../utils/slug'
+import { normalizeEmbedHtml } from '../../../utils/embed'
 
 export default defineEventHandler(async (event) => {
   await requireAdmin(event)
@@ -34,7 +35,7 @@ export default defineEventHandler(async (event) => {
       excerpt: String(body.excerpt || ''),
       body: String(body.body || ''),
       imageMediaId: body.image_media_id || null,
-      embedHtml: body.embed_html || null,
+      embedHtml: normalizeEmbedHtml(body.embed_html),
       category: String(body.category || 'Neuromarketing'),
       emoji: String(body.emoji || '🧠'),
       readTime: Number(body.read_time || 5),

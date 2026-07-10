@@ -9,6 +9,13 @@ useHead({
     { src: 'https://www.tiktok.com/embed.js', async: true }
   ]
 })
+
+onMounted(() => {
+  nextTick(() => {
+    ;(window as any).instgrm?.Embeds?.process?.()
+    ;(window as any).tiktokEmbed?.load?.()
+  })
+})
 </script>
 
 <template>
@@ -78,5 +85,45 @@ h1 {
 
 .embed-box {
   margin-top: 32px;
+}
+
+
+.detail-body :deep(img) {
+  display: block;
+  width: 100%;
+  max-height: 560px;
+  object-fit: cover;
+  border-radius: 18px;
+  margin: 28px 0;
+}
+
+.detail-body :deep(iframe),
+.embed-box :deep(iframe) {
+  display: block;
+  width: 100%;
+  min-height: 420px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--bg2);
+}
+
+.detail-body :deep(video),
+.embed-box :deep(video) {
+  display: block;
+  width: 100%;
+  border-radius: 18px;
+  background: #000;
+}
+
+.embed-box :deep(.tiktok-embed),
+.embed-box :deep(.instagram-media) {
+  margin: 0 auto !important;
+}
+
+@media (max-width: 640px) {
+  .detail-body :deep(iframe),
+  .embed-box :deep(iframe) {
+    min-height: 260px;
+  }
 }
 </style>

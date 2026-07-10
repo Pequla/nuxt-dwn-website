@@ -41,6 +41,25 @@ async function uploadTo(target: any, event: Event) {
   input.value = ''
 }
 
+
+async function uploadIntoBody(target: any, event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (!file) return
+
+  const media = await uploadImage(file)
+  const alt = String(target.title || target.client || 'Slika').replaceAll('"', '&quot;')
+  const imageHtml = `<p><img src="${media.url}" alt="${alt}"></p>`
+  target.body = [String(target.body || '').trim(), imageHtml].filter(Boolean).join('')
+  message.value = 'Slika je dodata u tekst. Sačuvaj stavku da ostane upisana.'
+  input.value = ''
+}
+
+function appendEmbedHelp(target: any) {
+  target.embed_html = String(target.embed_html || '').trim()
+  message.value = 'U ovo polje možeš nalepiti TikTok, Instagram, YouTube, Vimeo ili direktan video link. Može i kompletan iframe/embed HTML.'
+}
+
 async function loadAll() {
   const [sectionRes, postRes, caseRes] = await Promise.all([
     guardedFetch<{ sections: any[] }>('/api/admin/sections'),
@@ -256,7 +275,16 @@ onMounted(loadAll)
               <div class="field"><label>Labela</label><input v-model="item.label"></div>
               <div class="field"><label>Link</label><input v-model="item.url"></div>
             </div>
-            <div class="field"><label>Tekst</label><textarea v-model="item.body"></textarea></div>
+            <div class="field">
+            <label>Tekst</label>
+            <textarea v-model="item.body" placeholder="Može običan tekst ili HTML. Za slike u tekstu koristi dugme ispod."></textarea>
+            <div class="inline-tools">
+              <label class="file-tool">
+                Dodaj sliku u tekst
+                <input type="file" accept="image/*" @change="uploadIntoBody(item, $event)">
+              </label>
+            </div>
+          </div>
             <div class="field">
               <label>Slika</label>
               <div class="upload-row">
@@ -292,7 +320,16 @@ onMounted(loadAll)
             <div class="field"><label>Minuta čitanja</label><input v-model.number="post.read_time" type="number"></div>
           </div>
           <div class="field"><label>Kratak opis</label><textarea v-model="post.excerpt"></textarea></div>
-          <div class="field"><label>Tekst</label><textarea v-model="post.body"></textarea></div>
+          <div class="field">
+            <label>Tekst</label>
+            <textarea v-model="post.body" placeholder="Može običan tekst ili HTML. Za slike u tekstu koristi dugme ispod."></textarea>
+            <div class="inline-tools">
+              <label class="file-tool">
+                Dodaj sliku u tekst
+                <input type="file" accept="image/*" @change="uploadIntoBody(post, $event)">
+              </label>
+            </div>
+          </div>
           <div class="field">
             <label>Slika</label>
             <div class="upload-row">
@@ -300,7 +337,11 @@ onMounted(loadAll)
               <input type="file" accept="image/*" @change="uploadTo(post, $event)">
             </div>
           </div>
-          <div class="field"><label>Embed HTML / iframe / Instagram / TikTok</label><textarea v-model="post.embed_html"></textarea></div>
+          <div class="field">
+            <label>Video / Embed link ili HTML</label>
+            <textarea v-model="post.embed_html" placeholder="Nalepi TikTok, Instagram, YouTube, Vimeo ili MP4 link. Može i kompletan iframe/embed HTML."></textarea>
+            <button class="btn secondary tiny" type="button" @click="appendEmbedHelp(post)">Kako radi embed?</button>
+          </div>
           <div class="bottom-row">
             <div class="check-row">
               <label><input v-model="post.show_home" type="checkbox" :true-value="1" :false-value="0"> Na početnoj</label>
@@ -328,7 +369,16 @@ onMounted(loadAll)
           </div>
           <div class="field"><label>Druga kategorija</label><input v-model="item.secondary_category"></div>
           <div class="field"><label>Kratak opis</label><textarea v-model="item.excerpt"></textarea></div>
-          <div class="field"><label>Tekst</label><textarea v-model="item.body"></textarea></div>
+          <div class="field">
+            <label>Tekst</label>
+            <textarea v-model="item.body" placeholder="Može običan tekst ili HTML. Za slike u tekstu koristi dugme ispod."></textarea>
+            <div class="inline-tools">
+              <label class="file-tool">
+                Dodaj sliku u tekst
+                <input type="file" accept="image/*" @change="uploadIntoBody(item, $event)">
+              </label>
+            </div>
+          </div>
           <div class="field">
             <label>Slika</label>
             <div class="upload-row">
@@ -336,7 +386,11 @@ onMounted(loadAll)
               <input type="file" accept="image/*" @change="uploadTo(item, $event)">
             </div>
           </div>
-          <div class="field"><label>Embed HTML / iframe / Instagram / TikTok</label><textarea v-model="item.embed_html"></textarea></div>
+          <div class="field">
+            <label>Video / Embed link ili HTML</label>
+            <textarea v-model="item.embed_html" placeholder="Nalepi TikTok, Instagram, YouTube, Vimeo ili MP4 link. Može i kompletan iframe/embed HTML."></textarea>
+            <button class="btn secondary tiny" type="button" @click="appendEmbedHelp(item)">Kako radi embed?</button>
+          </div>
           <div class="form-row">
             <div class="field"><label>Metrika 1 vrednost</label><input v-model="item.metric1_value"></div>
             <div class="field"><label>Metrika 1 opis</label><input v-model="item.metric1_label"></div>
@@ -505,6 +559,41 @@ p {
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--bg2);
+}
+
+
+.inline-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.file-tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--brand-border);
+  border-radius: 999px;
+  color: var(--teal) !important;
+  font-size: 0.78rem !important;
+  font-weight: 800;
+  cursor: pointer;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+.file-tool input {
+  display: none;
+}
+
+.btn.tiny {
+  justify-self: start;
+  min-height: 34px;
+  padding: 0 14px;
+  font-size: 0.78rem;
 }
 
 .bottom-row {
