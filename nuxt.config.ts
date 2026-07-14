@@ -17,7 +17,21 @@ export default defineNuxtConfig({
           href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap'
         }
       ]
-    }
+    },
+    script: [
+      {
+        src: 'https://www.googletagmanager.com/gtag/js?id=G-ETKSH1K6GJ',
+        async: true,
+      },
+      {
+        innerHTML: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-ETKSH1K6GJ');
+          `,
+      },
+    ],
   },
   runtimeConfig: {
     dbHost: process.env.DB_HOST || '127.0.0.1',
